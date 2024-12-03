@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Items</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lista de Items</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            <!-- Los datos se insertarán aquí dinámicamente -->
+        </tbody>
+    </table>
+    <script>
+        // URL de tu API
+        const API_URL = 'http://localhost:3000/api/items';
+
+        // Función para cargar datos de la API
+        async function loadItems() {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error('Error al cargar los datos');
+
+                const items = await response.json();
+                console.log('Datos obtenidos de la API:', items); // <---- Log para depuración
+
+                const tableBody = document.getElementById('table-body');
+                tableBody.innerHTML = '';
+
+                items.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.id}</td>
+                        <td>${item.name}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Llamar a la función para cargar datos al cargar la página
+        window.onload = loadItems;
+    </script>
+</body>
+</html>
+
